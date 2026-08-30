@@ -1,0 +1,776 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Three Sevens">
+<meta name="format-detection" content="telephone=no">
+<meta name="theme-color" content="#F6F7FB" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0E1016" media="(prefers-color-scheme: dark)">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="icon" type="image/png" href="icons/icon-192.png">
+<link rel="manifest" href="manifest.webmanifest">
+<title>Three Sevens</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=DM+Mono:wght@400;500&family=Public+Sans:wght@400;500;600;700&display=swap">
+
+<style>
+:root{
+  --sun:#FFB000;      --sun-soft:#FFF2D2;  --sun-ink:#7A5200;
+  --sea:#2B6BFF;      --sea-soft:#E1EAFF;  --sea-ink:#123C9E;
+  --dusk:#7A4DFF;     --dusk-soft:#EBE4FF; --dusk-ink:#3F1FA6;
+  --go:#17BF63;       --go-soft:#D8F5E6;
+  --flare:#FF4438;    --flare-soft:#FFE3E0;
+
+  --ground:#F6F7FB;
+  --card:#FFFFFF;
+  --raise:#FFFFFF;
+  --ink:#15171E;
+  --ink-2:#4C5262;
+  --ink-3:#878DA0;
+  --line:#E5E8F0;
+  --line-2:#EEF0F6;
+  --shadow:0 1px 2px rgba(21,23,30,.05), 0 8px 24px -12px rgba(21,23,30,.18);
+  --track:#E9ECF4;
+
+  --f-display:"Bricolage Grotesque", "Public Sans", system-ui, sans-serif;
+  --f-body:"Public Sans", system-ui, -apple-system, sans-serif;
+  --f-mono:"DM Mono", ui-monospace, SFMono-Regular, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --sun:#FFC133;      --sun-soft:#3A2C08;  --sun-ink:#FFD277;
+    --sea:#6C97FF;      --sea-soft:#131F3F;  --sea-ink:#A9C1FF;
+    --dusk:#A184FF;     --dusk-soft:#221743; --dusk-ink:#C7B4FF;
+    --go:#2CD97A;       --go-soft:#0D2E1D;
+    --flare:#FF6B60;    --flare-soft:#341613;
+
+    --ground:#0E1016;
+    --card:#171A22;
+    --raise:#1E222C;
+    --ink:#ECEEF5;
+    --ink-2:#A7AEC1;
+    --ink-3:#6E7589;
+    --line:#272C38;
+    --line-2:#20242E;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px -14px rgba(0,0,0,.7);
+    --track:#252A35;
+  }
+}
+:root[data-theme="dark"]{
+  --sun:#FFC133;      --sun-soft:#3A2C08;  --sun-ink:#FFD277;
+  --sea:#6C97FF;      --sea-soft:#131F3F;  --sea-ink:#A9C1FF;
+  --dusk:#A184FF;     --dusk-soft:#221743; --dusk-ink:#C7B4FF;
+  --go:#2CD97A;       --go-soft:#0D2E1D;
+  --flare:#FF6B60;    --flare-soft:#341613;
+
+  --ground:#0E1016;
+  --card:#171A22;
+  --raise:#1E222C;
+  --ink:#ECEEF5;
+  --ink-2:#A7AEC1;
+  --ink-3:#6E7589;
+  --line:#272C38;
+  --line-2:#20242E;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px -14px rgba(0,0,0,.7);
+  --track:#252A35;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--ground);
+  color:var(--ink);
+  font-family:var(--f-body);
+  font-size:16px;
+  line-height:1.45;
+  -webkit-font-smoothing:antialiased;
+  -webkit-tap-highlight-color:transparent;
+}
+.wrap{
+  max-width:520px;
+  margin:0 auto;
+  padding:20px 16px calc(48px + env(safe-area-inset-bottom));
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+}
+
+/* ---------- masthead ---------- */
+.masthead{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.wordmark{
+  font-family:var(--f-display);
+  font-weight:800;
+  font-size:19px;
+  letter-spacing:-.02em;
+  margin:0;
+}
+.wordmark span{color:var(--sun)}
+.wordmark span+span{color:var(--sea)}
+.wordmark span+span+span{color:var(--dusk)}
+.datestamp{
+  font-family:var(--f-mono);
+  font-size:12px;
+  color:var(--ink-3);
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  white-space:nowrap;
+}
+
+/* ---------- day ring ---------- */
+.dial{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:22px;
+  box-shadow:var(--shadow);
+  padding:22px 20px 18px;
+  display:grid;
+  grid-template-columns:auto 1fr;
+  gap:20px;
+  align-items:center;
+}
+.ringbox{position:relative;width:132px;height:132px;flex:none}
+.ringbox svg{width:100%;height:100%;display:block;transform:rotate(0deg)}
+.ring-track{stroke:var(--track)}
+.arc{
+  fill:none;
+  stroke-width:13;
+  stroke-linecap:round;
+  transition:stroke-dasharray .55s cubic-bezier(.32,.72,.3,1), opacity .3s;
+}
+.ring-center{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:1px;
+}
+.ring-num{
+  font-family:var(--f-display);
+  font-weight:800;
+  font-size:34px;
+  line-height:1;
+  letter-spacing:-.03em;
+  font-variant-numeric:tabular-nums;
+}
+.ring-den{
+  font-family:var(--f-mono);
+  font-size:11px;
+  color:var(--ink-3);
+  letter-spacing:.08em;
+}
+.dial-side{display:flex;flex-direction:column;gap:12px;min-width:0}
+.dial-head{
+  font-family:var(--f-display);
+  font-weight:800;
+  font-size:22px;
+  line-height:1.15;
+  letter-spacing:-.025em;
+  margin:0;
+  text-wrap:balance;
+}
+.legend{display:flex;flex-direction:column;gap:7px}
+.legend-row{
+  display:flex;align-items:center;gap:9px;
+  font-size:13px;color:var(--ink-2);
+}
+.legend-dot{width:9px;height:9px;border-radius:50%;flex:none}
+.legend-name{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.legend-count{
+  font-family:var(--f-mono);font-size:12px;
+  font-variant-numeric:tabular-nums;color:var(--ink-3);
+}
+.legend-row.full .legend-count{color:var(--go)}
+
+/* ---------- blocks ---------- */
+.block{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:20px;
+  box-shadow:var(--shadow);
+  overflow:hidden;
+}
+.block-head{
+  display:flex;align-items:center;gap:11px;
+  padding:15px 16px 13px;
+  border-bottom:1px solid var(--line-2);
+}
+.block-mark{
+  width:34px;height:34px;border-radius:11px;
+  display:grid;place-items:center;flex:none;
+  background:var(--tint);
+}
+.block-mark svg{width:19px;height:19px;stroke:var(--hue);fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.block-titles{flex:1;min-width:0}
+.block-name{
+  font-family:var(--f-display);
+  font-weight:800;font-size:17px;letter-spacing:-.02em;
+  line-height:1.2;margin:0;
+}
+.block-time{
+  font-family:var(--f-mono);font-size:11.5px;color:var(--ink-3);
+  letter-spacing:.05em;
+}
+.block-score{
+  font-family:var(--f-mono);
+  font-size:13px;font-variant-numeric:tabular-nums;
+  color:var(--ink-2);
+  background:var(--line-2);
+  padding:4px 9px;border-radius:8px;
+  transition:background .3s,color .3s;
+}
+.block.done .block-score{background:var(--go-soft);color:var(--go)}
+
+.tasks{list-style:none;margin:0;padding:0}
+.task{border-top:1px solid var(--line-2)}
+.task:first-child{border-top:none}
+.task-btn{
+  width:100%;
+  display:flex;align-items:flex-start;gap:13px;
+  padding:13px 16px;
+  background:none;border:none;
+  font:inherit;color:inherit;text-align:left;
+  cursor:pointer;
+  transition:background .18s;
+}
+.task-btn:hover{background:var(--line-2)}
+.task-btn:focus-visible{outline:2px solid var(--hue);outline-offset:-3px}
+.box{
+  width:23px;height:23px;border-radius:8px;flex:none;
+  border:2px solid var(--track);
+  margin-top:1px;
+  display:grid;place-items:center;
+  transition:background .22s,border-color .22s,transform .22s;
+}
+.box svg{width:13px;height:13px;stroke:#fff;fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;
+  stroke-dasharray:22;stroke-dashoffset:22;opacity:0;
+  transition:stroke-dashoffset .28s ease .05s, opacity .12s}
+.task-text{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.task-title{font-size:15.5px;font-weight:600;letter-spacing:-.005em;transition:color .22s}
+.task-note{font-size:12.5px;color:var(--ink-3);line-height:1.35}
+.task-kill{
+  flex:none;border:none;background:none;cursor:pointer;
+  color:var(--ink-3);padding:2px 4px;font-size:15px;line-height:1;
+  border-radius:6px;
+}
+.task-kill:hover{color:var(--flare);background:var(--flare-soft)}
+
+.task.on .box{background:var(--hue);border-color:var(--hue);transform:scale(1.06)}
+.task.on .box svg{stroke-dashoffset:0;opacity:1}
+.block[data-block="morning"] .box svg{stroke:#3B2600}
+.task.on .task-title{color:var(--ink-3);text-decoration:line-through;text-decoration-thickness:1.5px;text-decoration-color:var(--hue)}
+.task.on .task-note{opacity:.72}
+.task.on .task-btn{background:var(--tint)}
+
+.add-row{border-top:1px solid var(--line-2);display:flex;gap:8px;padding:10px 16px 12px}
+.add-row input{
+  flex:1;min-width:0;
+  font:inherit;font-size:14.5px;
+  background:var(--ground);
+  border:1px solid var(--line);
+  color:var(--ink);
+  border-radius:10px;padding:9px 11px;
+}
+.add-row input::placeholder{color:var(--ink-3)}
+.add-row input:focus{outline:2px solid var(--hue);outline-offset:-1px;border-color:transparent}
+.add-row button{
+  font:inherit;font-weight:600;font-size:14px;
+  border:none;border-radius:10px;padding:0 15px;
+  background:var(--hue);color:#fff;cursor:pointer;
+}
+:root[data-theme="dark"] .add-row button,
+.add-row button{color:#0E1016}
+.block[data-block="afternoon"] .add-row button,
+.block[data-block="evening"] .add-row button{color:#fff}
+
+/* ---------- streak + history ---------- */
+.strip{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:20px;
+  box-shadow:var(--shadow);
+  padding:16px;
+  display:flex;flex-direction:column;gap:14px;
+}
+.streak{display:flex;align-items:center;gap:12px}
+.streak-badge{
+  width:44px;height:44px;border-radius:14px;flex:none;
+  background:var(--flare-soft);
+  display:grid;place-items:center;
+}
+.streak-badge svg{width:22px;height:22px;fill:var(--flare)}
+.streak-num{
+  font-family:var(--f-display);font-weight:800;
+  font-size:21px;letter-spacing:-.02em;line-height:1.1;
+}
+.streak-cap{font-size:12.5px;color:var(--ink-3)}
+.week{display:flex;gap:6px}
+.day{
+  flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;
+}
+.day-bar{
+  width:100%;height:38px;border-radius:9px;
+  background:var(--track);
+  position:relative;overflow:hidden;
+}
+.day-fill{
+  position:absolute;left:0;right:0;bottom:0;
+  background:var(--go);
+  border-radius:9px;
+  transition:height .4s cubic-bezier(.32,.72,.3,1);
+}
+.day.today .day-bar{box-shadow:0 0 0 2px var(--sea)}
+.day-lab{font-family:var(--f-mono);font-size:10px;color:var(--ink-3);letter-spacing:.04em}
+
+/* ---------- brain dump ---------- */
+.dump{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:20px;
+  box-shadow:var(--shadow);
+  padding:16px;
+  display:flex;flex-direction:column;gap:10px;
+}
+.dump-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.dump-title{
+  font-family:var(--f-display);font-weight:800;
+  font-size:16px;letter-spacing:-.02em;margin:0;
+}
+.dump-hint{font-size:12px;color:var(--ink-3)}
+.dump textarea{
+  font:inherit;font-size:15px;line-height:1.5;
+  background:var(--ground);
+  border:1px solid var(--line);
+  color:var(--ink);
+  border-radius:12px;padding:12px;
+  min-height:104px;resize:vertical;width:100%;
+}
+.dump textarea::placeholder{color:var(--ink-3)}
+.dump textarea:focus{outline:2px solid var(--dusk);outline-offset:-1px;border-color:transparent}
+
+/* ---------- footer ---------- */
+.footbar{display:flex;gap:10px;align-items:center;justify-content:space-between}
+.ghost{
+  font:inherit;font-size:13px;font-weight:600;
+  background:none;border:1px solid var(--line);
+  color:var(--ink-2);
+  padding:9px 14px;border-radius:11px;cursor:pointer;
+}
+.ghost:hover{border-color:var(--flare);color:var(--flare);background:var(--flare-soft)}
+.tagline{font-size:12px;color:var(--ink-3);font-family:var(--f-mono);letter-spacing:.03em}
+
+/* ---------- all-done banner ---------- */
+.crown{
+  background:linear-gradient(120deg,var(--sun-soft),var(--go-soft) 55%,var(--sea-soft));
+  border:1px solid var(--go);
+  border-radius:18px;
+  padding:14px 16px;
+  display:none;
+  align-items:center;gap:12px;
+}
+.crown.show{display:flex;animation:pop .45s cubic-bezier(.2,.9,.3,1.2)}
+.crown-txt{font-family:var(--f-display);font-weight:800;font-size:16px;letter-spacing:-.02em;color:var(--ink)}
+.crown-sub{font-size:12.5px;color:var(--ink-2)}
+@keyframes pop{from{opacity:0;transform:scale(.96) translateY(6px)}to{opacity:1;transform:none}}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms !important;transition-duration:.01ms !important}
+}
+@media (max-width:400px){
+  .dial{grid-template-columns:1fr;justify-items:center;text-align:center}
+  .dial-side{width:100%}
+  .dial-head{text-align:center}
+}
+</style>
+
+<style>
+  /* standalone home-screen app: clear the status bar and the home indicator */
+  .wrap{padding-top:calc(20px + env(safe-area-inset-top));
+        padding-bottom:calc(48px + env(safe-area-inset-bottom))}
+  html{-webkit-text-size-adjust:100%}
+  body{overscroll-behavior-y:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="masthead">
+    <h1 class="wordmark"><span>Three</span> <span>Sevens</span></h1>
+    <div class="datestamp" id="datestamp"></div>
+  </header>
+
+  <section class="dial">
+    <div class="ringbox">
+      <svg viewBox="0 0 200 200" aria-hidden="true">
+        <g id="ring"></g>
+      </svg>
+      <div class="ring-center">
+        <div class="ring-num" id="ringNum">0</div>
+        <div class="ring-den">OF 21</div>
+      </div>
+    </div>
+    <div class="dial-side">
+      <h2 class="dial-head" id="dialHead">Seven in the morning, seven at midday, seven at night.</h2>
+      <div class="legend" id="legend"></div>
+    </div>
+  </section>
+
+  <div class="crown" id="crown">
+    <div class="streak-badge" style="background:var(--go-soft)">
+      <svg viewBox="0 0 24 24" style="fill:none;stroke:var(--go);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;width:22px;height:22px"><path d="M20 6 9 17l-5-5"/></svg>
+    </div>
+    <div>
+      <div class="crown-txt" id="crownTxt">All 21. Full day.</div>
+      <div class="crown-sub">Morning, midday and night &#x2014; every one of them checked.</div>
+    </div>
+  </div>
+
+  <div id="blocks"></div>
+
+  <section class="strip">
+    <div class="streak">
+      <div class="streak-badge">
+        <svg viewBox="0 0 24 24"><path d="M12 2c.6 3.4-1.2 4.7-2.6 6.2C7.7 9.9 6 11.6 6 14.5A6 6 0 0 0 18 15c0-2.4-1-4-2.2-5.4-.5 1-1.2 1.7-2 2 .7-2.6-.2-5.8-1.8-9.6Z"/></svg>
+      </div>
+      <div>
+        <div class="streak-num" id="streakNum">0 days</div>
+        <div class="streak-cap" id="streakCap">A day counts once you clear 15 of 21.</div>
+      </div>
+    </div>
+    <div class="week" id="week"></div>
+  </section>
+
+  <section class="dump">
+    <div class="dump-head">
+      <h2 class="dump-title">Brain dump</h2>
+      <span class="dump-hint" id="dumpHint">Saved</span>
+    </div>
+    <textarea id="dump" placeholder="Everything still running in your head &#x2014; put it here so it isn't in there at 1am."></textarea>
+  </section>
+
+  <div class="footbar">
+    <span class="tagline">Saved on this device</span>
+    <button class="ghost" id="reset">Clear today</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var BLOCKS = [
+    { id:"morning", name:"Morning", time:"07:00", hue:"var(--sun)", tint:"var(--sun-soft)",
+      icon:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
+      tasks:[
+        ["m1","Up at 07:00 \u2014 no snooze","Feet on the floor the first time it rings."],
+        ["m2","Drink 2\u20133 glasses of water","Before coffee, before the phone."],
+        ["m3","Stretch and mobility","10 minutes to loosen up before you sit at a screen."],
+        ["m4","Walk outside","20\u201330 minutes. Move the body, get real air."],
+        ["m5","Brew a proper coffee","The good one. Take your time with it."],
+        ["m6","Plan the day \u2014 eat the frog","Scan the calendar, pick the 3 must-dos."],
+        ["m7","Clear the desk","Wipe the MacBook and iPad screens. Start clean."]
+      ]},
+    { id:"afternoon", name:"Afternoon", time:"12:00", hue:"var(--sea)", tint:"var(--sea-soft)",
+      icon:'<path d="M12 3v2M5.6 5.6l1.4 1.4M3 12h2M19 12h2M18.4 5.6 17 7"/><circle cx="12" cy="13" r="4"/><path d="M4 20h16"/>',
+      tasks:[
+        ["a1","Coding sprint","One hour of pure build on the macOS AI agent. No interruptions."],
+        ["a2","Hour on the business","Only the work that moves it forward."],
+        ["a3","Read or learn","20 minutes \u2014 a marketing chapter or a proper tutorial."],
+        ["a4","Money check","5 minutes: expenses, income, campaign budgets."],
+        ["a5","Digital upkeep","Tidy the desktop, update lock-screen widgets, back files up."],
+        ["a6","House basics","Start the laundry, handle what's piling up."],
+        ["a7","Clean your room","Ten minutes now beats an hour on Sunday."]
+      ]},
+    { id:"evening", name:"Evening", time:"19:00", hue:"var(--dusk)", tint:"var(--dusk-soft)",
+      icon:'<path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a7 7 0 1 0 10.5 10.5Z"/><path d="M17 4.5h.01M20 8h.01"/>',
+      tasks:[
+        ["e1","Home reset","15 minutes: living space, plants, one drawer or shelf."],
+        ["e2","Podcast on","A marketing or tech episode while you do the dishes."],
+        ["e3","Leisure, on purpose","A book, an episode, hunting down cynical quotes."],
+        ["e4","Review the day","Check off what got done. Carry the rest to tomorrow."],
+        ["e5","Set up tomorrow","Training clothes out, bag packed. Buy back the morning."],
+        ["e6","Brain dump","Empty the head into the note below."],
+        ["e7","Screens off","Dim the lights, Do Not Disturb, in bed for 7\u20138 hours."]
+      ]}
+  ];
+
+  var TOTAL = 21, THRESHOLD = 15, KEY = "threesevens.v1";
+  var state = load();
+
+  function load(){
+    try{
+      var raw = localStorage.getItem(KEY);
+      if(raw){
+        var p = JSON.parse(raw);
+        if(p && typeof p === "object"){
+          p.days = p.days || {};
+          p.custom = p.custom || [];
+          return p;
+        }
+      }
+    }catch(e){}
+    return { days:{}, custom:[] };
+  }
+  var saveTimer = null;
+  function save(){
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(function(){
+      try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){}
+    }, 120);
+  }
+
+  function key(d){
+    return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0");
+  }
+  var todayKey = key(new Date());
+  function day(k){
+    if(!state.days[k]) state.days[k] = { done:{}, note:"" };
+    return state.days[k];
+  }
+  function today(){ return day(todayKey); }
+
+  function tasksFor(b){
+    var base = b.tasks.map(function(t){ return { id:t[0], title:t[1], note:t[2], custom:false }; });
+    state.custom.filter(function(c){ return c.block === b.id; }).forEach(function(c){
+      base.push({ id:c.id, title:c.title, note:"", custom:true });
+    });
+    return base;
+  }
+  function countFor(b){
+    var d = today().done, n = 0;
+    tasksFor(b).forEach(function(t){ if(d[t.id]) n++; });
+    return n;
+  }
+  function totalDone(k){
+    var d = state.days[k]; if(!d) return 0;
+    var n = 0;
+    for(var id in d.done){ if(d.done[id]) n++; }
+    return n;
+  }
+
+  /* ---------- ring ---------- */
+  var GAP = 4, SEG = (100 - GAP*3) / 3;
+  var ringEl = document.getElementById("ring");
+  BLOCKS.forEach(function(b,i){
+    var rot = -90 + i*120 + GAP*1.8;
+    ringEl.insertAdjacentHTML("beforeend",
+      '<circle class="arc ring-track" cx="100" cy="100" r="76" pathLength="100" ' +
+      'stroke-dasharray="'+SEG+' '+(100-SEG)+'" transform="rotate('+rot+' 100 100)"/>' +
+      '<circle class="arc" id="arc-'+b.id+'" cx="100" cy="100" r="76" pathLength="100" ' +
+      'style="stroke:'+b.hue+'" stroke-dasharray="0 100" transform="rotate('+rot+' 100 100)"/>');
+  });
+
+  /* ---------- build blocks ---------- */
+  var blocksEl = document.getElementById("blocks");
+  blocksEl.style.display = "flex";
+  blocksEl.style.flexDirection = "column";
+  blocksEl.style.gap = "18px";
+
+  function esc(s){
+    return String(s).replace(/[&<>"']/g, function(c){
+      return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];
+    });
+  }
+
+  function renderBlocks(){
+    blocksEl.innerHTML = BLOCKS.map(function(b){
+      var list = tasksFor(b);
+      var rows = list.map(function(t){
+        return '<li class="task" data-id="'+esc(t.id)+'">' +
+          '<button class="task-btn" type="button" aria-pressed="false">' +
+            '<span class="box"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span>' +
+            '<span class="task-text">' +
+              '<span class="task-title">'+esc(t.title)+'</span>' +
+              (t.note ? '<span class="task-note">'+esc(t.note)+'</span>' : '') +
+            '</span>' +
+          '</button>' +
+          (t.custom ? '<button class="task-kill" type="button" data-kill="'+esc(t.id)+'" aria-label="Remove task">&times;</button>' : '') +
+        '</li>';
+      }).join("");
+      return '<section class="block" data-block="'+b.id+'" style="--hue:'+b.hue+';--tint:'+b.tint+'">' +
+        '<div class="block-head">' +
+          '<div class="block-mark"><svg viewBox="0 0 24 24" aria-hidden="true">'+b.icon+'</svg></div>' +
+          '<div class="block-titles">' +
+            '<h2 class="block-name">'+b.name+'</h2>' +
+            '<div class="block-time">'+b.time+'</div>' +
+          '</div>' +
+          '<div class="block-score" data-score="'+b.id+'">0/'+list.length+'</div>' +
+        '</div>' +
+        '<ul class="tasks">'+rows+'</ul>' +
+        '<form class="add-row" data-add="'+b.id+'">' +
+          '<input type="text" placeholder="Add something to the '+b.name.toLowerCase()+'" aria-label="New '+b.name.toLowerCase()+' task">' +
+          '<button type="submit">Add</button>' +
+        '</form>' +
+      '</section>';
+    }).join("");
+
+    blocksEl.querySelectorAll(".task-btn").forEach(function(btn){
+      btn.addEventListener("click", function(){
+        var li = btn.closest(".task"), id = li.dataset.id, d = today();
+        if(d.done[id]) delete d.done[id]; else d.done[id] = true;
+        save(); paint();
+      });
+    });
+    blocksEl.querySelectorAll("[data-kill]").forEach(function(btn){
+      btn.addEventListener("click", function(){
+        var id = btn.dataset.kill;
+        state.custom = state.custom.filter(function(c){ return c.id !== id; });
+        for(var k in state.days){ delete state.days[k].done[id]; }
+        save(); renderBlocks(); paint();
+      });
+    });
+    blocksEl.querySelectorAll("[data-add]").forEach(function(form){
+      form.addEventListener("submit", function(ev){
+        ev.preventDefault();
+        var input = form.querySelector("input");
+        var title = input.value.trim();
+        if(!title) return;
+        state.custom.push({ id:"c"+Date.now().toString(36), block:form.dataset.add, title:title });
+        input.value = "";
+        save(); renderBlocks(); paint();
+      });
+    });
+  }
+
+  /* ---------- legend ---------- */
+  var legendEl = document.getElementById("legend");
+  legendEl.innerHTML = BLOCKS.map(function(b){
+    return '<div class="legend-row" data-legend="'+b.id+'">' +
+      '<span class="legend-dot" style="background:'+b.hue+'"></span>' +
+      '<span class="legend-name">'+b.name+' &middot; '+b.time+'</span>' +
+      '<span class="legend-count" data-lcount="'+b.id+'">0/7</span>' +
+    '</div>';
+  }).join("");
+
+  /* ---------- week strip ---------- */
+  var weekEl = document.getElementById("week");
+  function renderWeek(){
+    var out = "", now = new Date();
+    for(var i = 6; i >= 0; i--){
+      var d = new Date(now); d.setDate(now.getDate() - i);
+      var k = key(d);
+      var cap = TOTAL + state.custom.length;
+      var pct = Math.min(100, Math.round(totalDone(k) / cap * 100));
+      out += '<div class="day'+(i===0?" today":"")+'" title="'+k+' \u2014 '+totalDone(k)+' done">' +
+        '<div class="day-bar"><div class="day-fill" style="height:'+pct+'%"></div></div>' +
+        '<div class="day-lab">'+["S","M","T","W","T","F","S"][d.getDay()]+'</div>' +
+      '</div>';
+    }
+    weekEl.innerHTML = out;
+  }
+
+  function streak(){
+    var n = 0, now = new Date();
+    for(var i = 0; i < 400; i++){
+      var d = new Date(now); d.setDate(now.getDate() - i);
+      var k = key(d), done = totalDone(k);
+      if(done >= THRESHOLD){ n++; }
+      else if(i === 0){ continue; }
+      else break;
+    }
+    return n;
+  }
+
+  /* ---------- paint ---------- */
+  var ringNum = document.getElementById("ringNum");
+  var crown = document.getElementById("crown");
+  var dialHead = document.getElementById("dialHead");
+
+  function paint(){
+    var d = today(), grand = 0, cap = 0;
+
+    BLOCKS.forEach(function(b){
+      var list = tasksFor(b), n = countFor(b);
+      grand += n; cap += list.length;
+
+      var arc = document.getElementById("arc-"+b.id);
+      var p = list.length ? n / list.length : 0;
+      arc.setAttribute("stroke-dasharray", (SEG*p).toFixed(2) + " " + (100 - SEG*p).toFixed(2));
+      arc.style.opacity = p > 0 ? "1" : "0";
+
+      var score = blocksEl.querySelector('[data-score="'+b.id+'"]');
+      if(score) score.textContent = n + "/" + list.length;
+      var sec = blocksEl.querySelector('[data-block="'+b.id+'"]');
+      if(sec) sec.classList.toggle("done", n === list.length && list.length > 0);
+
+      var lc = legendEl.querySelector('[data-lcount="'+b.id+'"]');
+      if(lc) lc.textContent = n + "/" + list.length;
+      legendEl.querySelector('[data-legend="'+b.id+'"]').classList.toggle("full", n === list.length);
+    });
+
+    blocksEl.querySelectorAll(".task").forEach(function(li){
+      var on = !!d.done[li.dataset.id];
+      li.classList.toggle("on", on);
+      li.querySelector(".task-btn").setAttribute("aria-pressed", on ? "true" : "false");
+    });
+
+    ringNum.textContent = grand;
+    document.querySelector(".ring-den").textContent = "OF " + cap;
+
+    var left = cap - grand;
+    if(grand === 0) dialHead.textContent = "Seven in the morning, seven at midday, seven at night.";
+    else if(grand === cap) dialHead.textContent = "Day cleared. Nothing left on the board.";
+    else if(left === 1) dialHead.textContent = "One left. Go finish it.";
+    else dialHead.textContent = left + " left on the board today.";
+
+    crown.classList.toggle("show", grand === cap && cap > 0);
+    document.getElementById("crownTxt").textContent = "All " + cap + ". Full day.";
+
+    var s = streak();
+    document.getElementById("streakNum").textContent = s === 1 ? "1 day" : s + " days";
+    document.getElementById("streakCap").textContent = s === 0
+      ? "Clear " + THRESHOLD + " of " + TOTAL + " today to start a streak."
+      : "Days in a row with " + THRESHOLD + "+ done.";
+    renderWeek();
+  }
+
+  /* ---------- brain dump ---------- */
+  var dump = document.getElementById("dump");
+  var dumpHint = document.getElementById("dumpHint");
+  dump.value = today().note || "";
+  dumpHint.textContent = dump.value ? "Saved" : "Empty";
+  dump.addEventListener("input", function(){
+    today().note = dump.value;
+    dumpHint.textContent = "Saving\u2026";
+    save();
+    clearTimeout(dump._t);
+    dump._t = setTimeout(function(){ dumpHint.textContent = dump.value ? "Saved" : "Empty"; }, 500);
+  });
+
+  /* ---------- reset ---------- */
+  document.getElementById("reset").addEventListener("click", function(){
+    if(!confirm("Clear every check for today? The note stays.")) return;
+    today().done = {};
+    save(); paint();
+  });
+
+  /* ---------- datestamp ---------- */
+  var now = new Date();
+  document.getElementById("datestamp").textContent =
+    now.toLocaleDateString("en-US", { weekday:"short", month:"short", day:"numeric" });
+
+  /* ---------- roll to a new day while open ---------- */
+  setInterval(function(){
+    var k = key(new Date());
+    if(k !== todayKey){ todayKey = k; dump.value = today().note || ""; paint(); }
+  }, 60000);
+
+  renderBlocks();
+  paint();
+})();
+</script>
+
+
+<script>
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", function () {
+      navigator.serviceWorker.register("sw.js").catch(function () {
+        // No service worker means no offline cache; the app still runs online.
+      });
+    });
+  }
+</script>
+</body>
+</html>
