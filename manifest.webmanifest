@@ -1,7 +1,7 @@
 {
-  "name": "Three Sevens",
-  "short_name": "Three Sevens",
-  "description": "Seven things in the morning, seven at midday, seven at night.",
+  "name": "My Daily Tasks",
+  "short_name": "My Daily Tasks",
+  "description": "The whole day, in three blocks: morning, midday and night.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",

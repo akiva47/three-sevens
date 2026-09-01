@@ -1,9 +1,9 @@
-// Three Sevens — offline cache.
+// My Daily Tasks — offline cache.
 //
 // The whole point of this file: after the first visit the app is stored on the
 // phone and runs with no network at all. Bump CACHE whenever index.html changes,
 // or phones will keep serving the version they already have.
-const CACHE = "three-sevens-v1";
+const CACHE = "three-sevens-v2";
 
 const SHELL = [
   "./",

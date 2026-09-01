@@ -6,14 +6,14 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Three Sevens">
+<meta name="apple-mobile-web-app-title" content="My Daily Tasks">
 <meta name="format-detection" content="telephone=no">
 <meta name="theme-color" content="#F6F7FB" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0E1016" media="(prefers-color-scheme: dark)">
 <link rel="apple-touch-icon" href="icons/icon-180.png">
 <link rel="icon" type="image/png" href="icons/icon-192.png">
 <link rel="manifest" href="manifest.webmanifest">
-<title>Three Sevens</title>
+<title>My Daily Tasks</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=DM+Mono:wght@400;500&family=Public+Sans:wght@400;500;600;700&display=swap">
@@ -397,7 +397,7 @@ body{
 <div class="wrap">
 
   <header class="masthead">
-    <h1 class="wordmark"><span>Three</span> <span>Sevens</span></h1>
+    <h1 class="wordmark"><span>My</span> <span>Daily</span> <span>Tasks</span></h1>
     <div class="datestamp" id="datestamp"></div>
   </header>
 
@@ -408,11 +408,11 @@ body{
       </svg>
       <div class="ring-center">
         <div class="ring-num" id="ringNum">0</div>
-        <div class="ring-den">OF 21</div>
+        <div class="ring-den">OF 22</div>
       </div>
     </div>
     <div class="dial-side">
-      <h2 class="dial-head" id="dialHead">Seven in the morning, seven at midday, seven at night.</h2>
+      <h2 class="dial-head" id="dialHead">The whole day, in three blocks.</h2>
       <div class="legend" id="legend"></div>
     </div>
   </section>
@@ -436,7 +436,7 @@ body{
       </div>
       <div>
         <div class="streak-num" id="streakNum">0 days</div>
-        <div class="streak-cap" id="streakCap">A day counts once you clear 15 of 21.</div>
+        <div class="streak-cap" id="streakCap">A day counts once you clear 15 of 22.</div>
       </div>
     </div>
     <div class="week" id="week"></div>
@@ -465,6 +465,7 @@ body{
       icon:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
       tasks:[
         ["m1","Up at 07:00 \u2014 no snooze","Feet on the floor the first time it rings."],
+        ["m8","Make your bed","Two minutes, and the first thing you finish today."],
         ["m2","Drink 2\u20133 glasses of water","Before coffee, before the phone."],
         ["m3","Stretch and mobility","10 minutes to loosen up before you sit at a screen."],
         ["m4","Walk outside","20\u201330 minutes. Move the body, get real air."],
@@ -496,7 +497,8 @@ body{
       ]}
   ];
 
-  var TOTAL = 21, THRESHOLD = 15, KEY = "threesevens.v1";
+  var TOTAL = BLOCKS.reduce(function(n,b){ return n + b.tasks.length; }, 0);
+  var THRESHOLD = 15, KEY = "threesevens.v1";
   var state = load();
 
   function load(){
@@ -710,7 +712,7 @@ body{
     document.querySelector(".ring-den").textContent = "OF " + cap;
 
     var left = cap - grand;
-    if(grand === 0) dialHead.textContent = "Seven in the morning, seven at midday, seven at night.";
+    if(grand === 0) dialHead.textContent = "The whole day, in three blocks.";
     else if(grand === cap) dialHead.textContent = "Day cleared. Nothing left on the board.";
     else if(left === 1) dialHead.textContent = "One left. Go finish it.";
     else dialHead.textContent = left + " left on the board today.";
