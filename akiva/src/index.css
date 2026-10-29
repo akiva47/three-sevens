@@ -1,0 +1,314 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-ink: #0d0d0f;
+  --color-ink-2: #171719;
+  --color-ink-3: #1f1e21;
+  --color-champagne: #d9bfa3;
+  --color-champagne-soft: #e8d6c2;
+  --color-champagne-deep: #b89a7c;
+  --color-ivory: #f5f0e8;
+  --color-mute: #9c9690;
+  --color-line: rgb(255 255 255 / 0.1);
+  --color-line-strong: rgb(255 255 255 / 0.16);
+
+  --font-sans: 'Geist Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Noto Sans Hebrew',
+    sans-serif;
+  --font-serif: 'Instrument Serif', ui-serif, Georgia, 'Times New Roman', serif;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* ─── Base ──────────────────────────────────────────────────────────── */
+
+@layer base {
+  html {
+    background-color: var(--color-ink);
+    color-scheme: dark;
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+    scroll-behavior: smooth;
+    scrollbar-color: rgb(255 255 255 / 0.14) transparent;
+  }
+
+  /* No body background: the fixed atmosphere layer sits behind the content. */
+  body {
+    min-height: 100dvh;
+    color: var(--color-ivory);
+    font-family: var(--font-sans);
+    font-feature-settings: 'ss01', 'cv11';
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: clip;
+  }
+
+  ::selection {
+    background: rgb(217 191 163 / 0.32);
+    color: var(--color-ivory);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-champagne);
+    outline-offset: 3px;
+  }
+
+  /* Elements that draw their own focus ring. */
+  .focus-ring:focus-visible {
+    outline: none;
+    box-shadow:
+      0 0 0 2px var(--color-ink),
+      0 0 0 4px var(--color-champagne);
+  }
+
+  em {
+    font-style: italic;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* ─── Atmosphere ────────────────────────────────────────────────────── */
+
+@utility grain {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+}
+
+@keyframes drift-a {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(6%, 4%, 0) scale(1.08);
+  }
+}
+
+@keyframes drift-b {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(-5%, -6%, 0) scale(1.12);
+  }
+}
+
+@keyframes drift-c {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.55;
+  }
+  50% {
+    transform: translate3d(3%, -4%, 0) scale(0.94);
+    opacity: 0.85;
+  }
+}
+
+@keyframes atmosphere-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes sheen {
+  0% {
+    transform: translateX(-120%) skewX(-18deg);
+  }
+  100% {
+    transform: translateX(220%) skewX(-18deg);
+  }
+}
+
+@keyframes spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.atmosphere {
+  animation: atmosphere-in 1.4s var(--ease-out-quart) both;
+}
+
+.orb {
+  position: absolute;
+  border-radius: 9999px;
+  will-change: transform;
+  pointer-events: none;
+}
+
+.orb-a {
+  animation: drift-a 26s ease-in-out infinite;
+}
+
+.orb-b {
+  animation: drift-b 32s ease-in-out infinite;
+}
+
+.orb-c {
+  animation: drift-c 22s ease-in-out infinite;
+}
+
+/* ─── Spotlight surfaces (social cards, buttons) ────────────────────── */
+
+/*
+ * --x / --y are set from pointer position in JS. The ::before paints a soft
+ * glow on the surface; the ::after lights up the 1px border near the cursor.
+ */
+.spotlight {
+  --x: 50%;
+  --y: 50%;
+  position: relative;
+  isolation: isolate;
+}
+
+.spotlight::before,
+.spotlight::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s var(--ease-out-quart);
+}
+
+.spotlight::before {
+  z-index: -1;
+  background: radial-gradient(260px circle at var(--x) var(--y), rgb(217 191 163 / 0.11), transparent 65%);
+}
+
+.spotlight::after {
+  padding: 1px;
+  background: radial-gradient(180px circle at var(--x) var(--y), rgb(232 214 194 / 0.55), transparent 70%);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .spotlight:hover::before,
+  .spotlight:hover::after {
+    opacity: 1;
+  }
+}
+
+.spotlight:focus-visible::after {
+  opacity: 1;
+}
+
+/* Arrow that slides out and a twin that slides in. */
+.arrow-swap {
+  position: relative;
+  overflow: hidden;
+}
+
+.arrow-swap > svg {
+  transition: transform 0.45s var(--ease-out-expo);
+}
+
+.arrow-swap > svg:last-child {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  transform: translate(-130%, 130%);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .group:hover .arrow-swap > svg:first-child {
+    transform: translate(130%, -130%);
+  }
+  .group:hover .arrow-swap > svg:last-child {
+    transform: translate(0, 0);
+  }
+}
+
+.group:focus-visible .arrow-swap > svg:first-child {
+  transform: translate(130%, -130%);
+}
+
+.group:focus-visible .arrow-swap > svg:last-child {
+  transform: translate(0, 0);
+}
+
+/* ─── Business card ─────────────────────────────────────────────────── */
+
+.card-surface {
+  background:
+    radial-gradient(120% 90% at 0% 0%, rgb(217 191 163 / 0.2), transparent 55%),
+    radial-gradient(90% 80% at 100% 100%, rgb(184 154 124 / 0.14), transparent 60%),
+    linear-gradient(145deg, #232022 0%, #151416 46%, #0f0e10 100%);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.12),
+    inset 0 0 0 1px rgb(255 255 255 / 0.07),
+    0 1px 1px rgb(0 0 0 / 0.4),
+    0 18px 40px -12px rgb(0 0 0 / 0.65),
+    0 40px 90px -30px rgb(217 191 163 / 0.18);
+}
+
+.card-sheen::after {
+  content: '';
+  position: absolute;
+  inset: -20% auto -20% 0;
+  width: 35%;
+  background: linear-gradient(90deg, transparent, rgb(255 246 235 / 0.09), transparent);
+  animation: sheen 1.6s var(--ease-out-quart) 1.6s 1 both;
+  pointer-events: none;
+}
+
+/* ─── Buttons ───────────────────────────────────────────────────────── */
+
+.btn-primary {
+  background: linear-gradient(180deg, #e6d1bb 0%, #d9bfa3 55%, #cdb092 100%);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.55),
+    inset 0 -1px 0 rgb(0 0 0 / 0.12),
+    0 10px 30px -10px rgb(217 191 163 / 0.55);
+}
+
+.btn-primary .btn-shine {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 40%;
+  background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.45), transparent);
+  transform: translateX(-120%) skewX(-18deg);
+  pointer-events: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .btn-primary:hover .btn-shine {
+    animation: sheen 0.9s var(--ease-out-quart);
+  }
+}
+
+/* ─── Reduced motion: keep the look, drop the movement ──────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .orb,
+  .card-sheen::after,
+  .btn-primary .btn-shine,
+  .spin-slow {
+    animation: none !important;
+  }
+  .arrow-swap > svg,
+  .spotlight::before,
+  .spotlight::after {
+    transition: none !important;
+  }
+}
+
+.spin-slow {
+  animation: spin-slow 18s linear infinite;
+}

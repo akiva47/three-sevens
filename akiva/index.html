@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>__SITE_TITLE__</title>
+    <meta name="description" content="__SITE_DESCRIPTION__" />
+    <meta name="author" content="__SITE_AUTHOR__" />
+    <meta name="theme-color" content="__SITE_THEME_COLOR__" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="format-detection" content="telephone=no" />
+    <link rel="canonical" href="__SITE_URL__" />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="AKIVA" />
+
+    <!-- Open Graph (WhatsApp, iMessage, Facebook, LinkedIn, Telegram) -->
+    <meta property="og:type" content="profile" />
+    <meta property="og:site_name" content="AKIVA" />
+    <meta property="og:title" content="__SITE_TITLE__" />
+    <meta property="og:description" content="__SITE_DESCRIPTION__" />
+    <meta property="og:url" content="__SITE_URL__" />
+    <meta property="og:image" content="__SITE_OG_IMAGE__" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="__SITE_OG_IMAGE_ALT__" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- X / Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="__SITE_TITLE__" />
+    <meta name="twitter:description" content="__SITE_DESCRIPTION__" />
+    <meta name="twitter:image" content="__SITE_OG_IMAGE__" />
+    <meta name="twitter:image:alt" content="__SITE_OG_IMAGE_ALT__" />
+
+    <style>
+      /* Paint the brand background before CSS loads — no white flash. */
+      html {
+        background: #0d0d0f;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <noscript>
+      <p style="color: #f5f0e8; font-family: system-ui, sans-serif; padding: 2rem; text-align: center">
+        Please enable JavaScript to view this page.
+      </p>
+    </noscript>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
